@@ -24,6 +24,7 @@ class Collection(db.Model):
     wiki_url = db.Column(db.String)
     discord_url = db.Column(db.String)
     image_url = db.Column(db.String)
+    # TODO: FIX - last update column should update each time the record is updated.
     last_updated = db.Column(
         db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -33,19 +34,20 @@ class Collection(db.Model):
 
     @classmethod
     def get_all(cls):
+        """Return all Collections."""
         return cls.query.all()
 
     @classmethod
     def get_one(cls, slug):
+        """Return a single collection.
+
+        Args:
+            slug (str) - a slug in reference to a specific collection
+
+        Returns:
+            Collection record, or None.
+        """
         return cls.query.filter_by(slug=slug).first()
-
-
-class StatLog(db.Model):
-    """Stat Log Model"""
-
-    __tablename__ = "statlogs"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
 
 class CollectionDashboard(db.Model):
@@ -70,6 +72,8 @@ class Dashboard(db.Model):
     slug = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     private = db.Column(db.Boolean, default=False)
+    created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    last_updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     collections = db.relationship(
@@ -77,16 +81,21 @@ class Dashboard(db.Model):
     )
 
     def set_slug(self, name):
-        """Generate a slug based on a Dashboard's Name
-        -- https://stackoverflow.com/questions/2627523/replace-all-spaces-and-special-symbols-with-dash-in-url-using-php-language
+        """Generate a Dashboard's URL Slug
 
-        Regex:
-        1 - Remove all characters except Letters & Numbers & Replace with a '-'
-        2 - Remove trailing '-' if they exist
+        Generate a URL safe slug through modifying the dashboard name with regex.
+
+        Regex Note:
+            Reference: https://stackoverflow.com/questions/2627523/replace-all-spaces-and-special-symbols-with-dash-in-url-using-php-language
+            1 - Remove all characters except Letters & Numbers & Replace with a '-'
+            2 - Remove trailing '-' if they exist
+
+        Args:
+            name (str): Name of a Dashboard.
         """
 
         safe_string = re.sub("[^a-zA-Z0-9]+", "-", name)
-        slug = re.sub("([-]*)$", "", safe_string)  #
+        slug = re.sub("([-]*)$", "", safe_string)
 
         self.slug = slug
 
@@ -115,7 +124,15 @@ class User(UserMixin, db.Model):
         self.password = hashed_pw.decode("utf8")
 
     def check_password(self, password):
-        """Check password against hashed password"""
+        """Check password against hashed password
+
+        Args:
+            password (str) - A password.
+
+        Returns:
+            True if password matches hash. Otherwise False
+
+        """
 
         return bcrypt.check_password_hash(self.password, password)
 
@@ -128,9 +145,9 @@ class CollectionStats(db.Model):
 
     __tablename__ = "collection_stats"
 
+    id = db.Column(db.Integer, primary_key=True)
     # Date/Time Record
     # Floor Price
-    #
 
     # relationship w/ collection
 

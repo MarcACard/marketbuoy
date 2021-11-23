@@ -11,6 +11,7 @@ def create_app():
     app = Flask(__name__, instance_relative_config=False)
 
     # App Configuration
+    # TODO: Fix configuration loading. Doesn't seem all settings are registering.
     app.config.from_object("config.Config")
 
     # Initialize Plugins
