@@ -39,13 +39,8 @@ def create_dashboard():
 def get_dashboard(username, db_slug):
     """Get a Users Dashboard"""
 
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        abort(404)
-
-    dashboard = Dashboard.query.filter_by(user_id=user.id, slug=db_slug).first()
-    if dashboard is None:
-        abort(404)
+    user = User.query.filter_by(username=username).first_or_404()
+    dashboard = Dashboard.query.filter_by(user_id=user.id, slug=db_slug).first_or_404()
 
     return render_template("dashboard.html.j2", user=user, dashboard=dashboard)
 
@@ -55,15 +50,9 @@ def get_dashboard(username, db_slug):
 def edit_dashboard(username, db_slug):
     """Render a form and process edits to user dashboards"""
 
-    user = User.query.filter_by(username=username).first()
-    # TODO: Abstract check into decorator
-    if user is None:
-        abort(404)
+    user = User.query.filter_by(username=username).first_or_404()
 
-    dashboard = Dashboard.query.filter_by(user_id=user.id, slug=db_slug).first()
-    # TODO: Abstract check into decorator
-    if dashboard is None:
-        abort(404)
+    dashboard = Dashboard.query.filter_by(user_id=user.id, slug=db_slug).first_or_404()
 
     # TODO: Abstract into Decorator
     if current_user.username != username:
@@ -92,6 +81,7 @@ def edit_dashboard(username, db_slug):
         dashboard.collections = collections
 
         db.session.commit()
+
         flash("Dashboard Updated.", "message")
         return redirect(
             url_for(
