@@ -1,0 +1,22 @@
+{% extends "base.html.j2" %}
+{% block title %} | Collections{% endblock %}
+
+{% block content %}
+<h1>Collections</h1>
+
+<a href="/collections/add">Add</a>
+
+{% for collection in collections %}
+<h2><a href="/collections/id/{{ collection.slug }}">{{ collection.name }}</a></h2>
+<ul>
+    <li>Banner URL: {{collection.banner_image_url}}</li>
+    <li>Created Date: {{collection.created_date}}</li>
+    <li>Telegram URL: {{collection.telegram_url}}</li>
+    <li>Twitter: {{collection.twitter_username}}</li>
+    <li>Instagram: {{collection.instagram_username}}</li>
+    <li>Wiki: {{collection.wiki_url}}</li>
+</ul>
+
+{% endfor %}
+
+{% endblock %}

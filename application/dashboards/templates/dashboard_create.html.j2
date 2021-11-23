@@ -1,0 +1,48 @@
+{% extends "base.html.j2" %}
+{% block title %} | Create Dashboard{% endblock %}
+
+{% block content %}
+<h1>Create Dashboard</h1>
+
+<form method="POST">
+    {{form.csrf_token}}
+    <div>
+        {{ form.name.label }}
+        {{ form.name() }}
+        {% if form.name.errors %}
+            <ul>
+                {% for error in form.name.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div>
+        {{ form.description.label }}
+        {{ form.description() }}
+        {% if form.description.errors %}
+            <ul>
+                {% for error in form.description.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div>
+        {{ form.private.label }}
+        {{ form.private() }}
+        {% if form.private.errors %}
+            <ul>
+                {% for error in form.private.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div>
+        <button>Create</button>
+    </div>
+</form>
+
+
+{% endblock %}

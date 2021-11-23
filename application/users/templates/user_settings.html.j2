@@ -1,0 +1,52 @@
+{% extends "base.html.j2" %}
+{% block title %} | User Settings{% endblock %}
+
+{% block content %}
+<h1>{{ current_user.username}}'s Settings</h1>
+
+<form method="POST" action="/u/settings">
+    {{form.csrf_token}}
+    <div>
+        {{ form.twitter_id.label }}
+        {{ form.twitter_id() }}
+        {% if form.twitter_id.errors %}
+            <ul>
+                {% for error in form.twitter_id.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div>
+        {{ form.website.label }}
+        {{ form.website() }}
+        {% if form.website.errors %}
+            <ul>
+                {% for error in form.website.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    </div>
+    <div>
+        {{ form.bio.label }}
+        {{ form.bio() }}
+        {% if form.bio.errors %}
+            <ul>
+                {% for error in form.bio.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div>
+        <button>Save</button>
+    </div>
+</form>
+
+<a href="/u/{{ current_user.username}}">Cancel</a>
+
+<form method="POST" action="/u/settings/delete"><button>Delete</button></form>
+
+{% endblock %}

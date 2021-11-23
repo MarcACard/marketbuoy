@@ -1,0 +1,29 @@
+{% extends "base.html.j2" %}
+{% block title %} | Add Collection{% endblock %}
+
+{% block content %}
+<h1>Add a Collection</h1>
+
+<div>
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != "hidden" %}
+        <div>
+            {{ field.label(class_="form-label") }}
+            {{ field(class_="form-control") }}
+        </div>
+        {% if field.errors %}
+        <ul>
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endfor %}
+
+        <button>Add Collection</button>
+    </form>
+</div>
+
+{% endblock %}

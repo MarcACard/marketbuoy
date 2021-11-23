@@ -1,0 +1,48 @@
+{% extends "base.html.j2" %}
+{% block title %} | {{ dashboard.name }}{% endblock %}
+
+{% block content %}
+<h1><a href="{{ url_for('users_bp.user_profile', username=user.username)}}">{{ user.username }}</a> / {{ dashboard.name }}</h1>
+{% if current_user.username == user.username %}
+    <a href="{{ url_for('dashboards_bp.edit_dashboard', username=user.username, db_slug=dashboard.slug)}}">Edit Dashboard</a>
+{% endif %}
+
+{% if (not dashboard.private or (dashboard.private and current_user.username == user.username)) %}
+    <table>
+        <thead>
+            <tr>
+                <th>Collection Name</th>
+                <th colspan="3">Floor Price (ETH)</th>
+                <th colspan="3">Floor Price (USD)</th>
+
+            </tr>
+            <tr>
+                <th></th>
+                <th>Yesterday</th>
+                <th>Today</th>
+                <th>24h Change</th>
+                <th>Yesterday</th>
+                <th>Today</th>
+                <th>24h Change</th>
+            </tr>
+        <thead>
+        <tbody>
+            {% for collection in dashboard.collections %}
+            <tr>
+                <td><img src="{{ collection.image_url }}" style="width:50px; border-radius:50%"><a href="{{ url_for('collections_bp.collection_details', slug=collection.slug) }}">{{ collection.name }}</a></td>
+                <td>5.3</td>
+                <td>6.2</td>
+                <td>5%</td>
+                <td>$11,420</td>
+                <td>$18,124</td>
+                <td>4%</td>
+            </tr>
+            {% endfor %}
+        <tbody>
+    </table>
+{% else %}
+    <p>Sorry, this Dashboard is currently set to Private</p>
+    <p>Return to <a href="{{ url_for('users_bp.user_profile', username=user.username)}}">User's Profile</a></p>
+{% endif %}
+
+{% endblock%}

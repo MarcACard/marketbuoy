@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarketBuoy{% block title %}{% endblock %}</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav>
+    <div><a href="/">MarketBuoy</a></div>
+    <div>
+        <ul>
+            <li><a href="/collections">Collections</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="/u/{{ current_user.username }}">Profile</a></li>
+            <li><a href="/auth/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/auth/signup">Sign-up</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- FLASH MESSAGES --> 
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <h3>Flash Messages</h2>
+        <ul>
+        {% for category, message in messages %}
+        <li>{{ category }}: {{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+{% block content %}{% endblock %}
+</div>
+    
+</body>
+</html>

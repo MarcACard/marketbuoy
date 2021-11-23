@@ -1,0 +1,38 @@
+{% extends "base.html.j2" %}
+{% block title %} | {{ user.username }}{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}</h1>
+
+<ul>
+    <li>Website: {% if user.website is not none %}{{ user.website }}{% endif %}</li>
+    <li>Twitter: {% if user.twitter_id is not none %}{{ user.twitter_id }}{% endif %}</li>
+    <li>Bio: {% if user.bio is not none %}{{ user.bio }}{% endif %}</li>
+</ul>
+
+{% if current_user.username == user.username %}
+    <a href="{{ url_for('users_bp.user_settings') }}">Edit Profile</a>
+{% endif %} 
+<hr>
+{# ---- User Dashboard Section ----#}
+<h2>Dashboards</h2>
+{% if current_user.username == user.username %}
+    <a href="{{ url_for('dashboards_bp.create_dashboard')  }}">New Dashboard</a>
+{% endif %} 
+{# -- Dashboard List -- #}
+{% if dashboards %}
+    <ul>
+    {% for db in dashboards %}
+        {% if not db.private %}
+            <li><a href="{{ url_for('dashboards_bp.get_dashboard', username=user.username, db_slug=db.slug) }}">{{ db.name }}</a></li>
+        {% elif (db.private and current_user.username == user.username)  %}
+            <li><a href="{{ url_for('dashboards_bp.get_dashboard', username=user.username, db_slug=db.slug) }}">{{ db.name }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No Dashboards currently exist</p>
+{% endif %}
+
+
+{% endblock %}

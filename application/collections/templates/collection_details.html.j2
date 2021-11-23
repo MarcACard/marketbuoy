@@ -1,0 +1,8 @@
+{% extends "base.html.j2" %}
+{% block title %} | {{ collection.name }}{% endblock %}
+
+{% block content %}
+<img src={{collection.banner_image_url}} style="width:500px">
+<h1>{{ collection.name }}</h1>
+
+{% endblock %}
