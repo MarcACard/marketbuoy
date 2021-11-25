@@ -10,39 +10,46 @@
 </head>
 <body>
 <!-- NAVBAR -->
-<nav>
-    <div><a href="/">MarketBuoy</a></div>
-    <div>
-        <ul>
-            <li><a href="/collections">Collections</a></li>
-            {% if current_user.is_authenticated %}
-            <li><a href="/u/{{ current_user.username }}">Profile</a></li>
-            <li><a href="/auth/logout">Logout</a></li>
-            {% else %}
-            <li><a href="/auth/signup">Sign-up</a></li>
-            <li><a href="/auth/login">Login</a></li>
-            {% endif %}
-        </ul>
+<!-- TODO: FIX COLLAPSE FOR SMALLER VIEW --> 
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow mb-3">
+    <div class="container-fluid">
+        <div>
+            <a class="navbar-brand fs-2" href="/">MarketBuoy</a>
+        </div>
+        <div class="collapse  navbar-collapse d-flex justify-content-end">
+            <ul class="navbar-nav fs-4">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link text-light" href="/u/{{ current_user.username }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link text-light" href="/collections">Collections</a></li>
+                <li class="nav-item"><a class="nav-link text-light" href="/auth/logout">Logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link text-light" href="/collections">Collections</a></li>
+                <li class="nav-item"><a class="nav-link text-light" href="/auth/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link text-light" href="/auth/signup">Sign-up</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>
 
 <!-- FLASH MESSAGES --> 
-<div>
+<div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-        <h3>Flash Messages</h2>
-        <ul>
         {% for category, message in messages %}
-        <li>{{ category }}: {{ message }}</li>
+            {% if category == "error"%}
+                <div class="alert alert-danger text-center">{{ message }}</div>
+            {% else %}
+                <div class="alert alert-primary text-center">{{ message }}}</div>
+            {% endif %}
         {% endfor %}
-        </ul>
     {% endif %}
     {% endwith %}
 </div>
 
 <!-- CONTENT -->
-<div id="content">
-{% block content %}{% endblock %}
+<div id="content" class="container">
+    {% block content %}{% endblock %}
 </div>
 <!-- Charts.js & Related Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
