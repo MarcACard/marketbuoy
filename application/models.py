@@ -1,5 +1,5 @@
 from . import db
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from flask_login import UserMixin
 from flask_bcrypt import Bcrypt
 import re
@@ -24,7 +24,6 @@ class Collection(db.Model):
     wiki_url = db.Column(db.String)
     discord_url = db.Column(db.String)
     image_url = db.Column(db.String)
-    # TODO: FIX - last update column should update each time the record is updated.
     last_updated = db.Column(
         db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -32,22 +31,14 @@ class Collection(db.Model):
     def __repr__(self):
         return f"<Collection | name: {self.name}>"
 
+    stats = db.relationship(
+        "CollectionStats", cascade="all, delete", backref="collection"
+    )
+
     @classmethod
     def get_all(cls):
         """Return all Collections."""
         return cls.query.all()
-
-    @classmethod
-    def get_one(cls, slug):
-        """Return a single collection.
-
-        Args:
-            slug (str) - a slug in reference to a specific collection
-
-        Returns:
-            Collection record, or None.
-        """
-        return cls.query.filter_by(slug=slug).first()
 
 
 class CollectionDashboard(db.Model):
@@ -146,9 +137,25 @@ class CollectionStats(db.Model):
     __tablename__ = "collection_stats"
 
     id = db.Column(db.Integer, primary_key=True)
-    # Date/Time Record
-    # Floor Price
+    created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    floor_price_usd = db.Column(db.Integer, nullable=False)
+    floor_price_eth = db.Column(db.Integer, nullable=False)
+    collection_id = db.Column(
+        db.Integer, db.ForeignKey("collections.id"), nullable=False
+    )
 
-    # relationship w/ collection
+    @classmethod
+    def todays_floor(cls, collection_id):
+        """Return the most recent Collection Stat for a Collection
 
-    # @Static Method - get_todays_floor (Collection) return current floor, yesterday floor, % change in an object
+        Args:
+            collection_id (int): Collection Id
+
+        Returns
+            A CollectionStat instance record or none.
+        """
+        return (
+            cls.query.filter_by(id=collection_id)
+            .order_by(desc(cls.created_date))
+            .first()
+        )

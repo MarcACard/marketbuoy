@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, flash, url_for
-from application.models import Collection, db
+from application.models import Collection, db, CollectionStats
 from application.forms import CollectionForm
 from application.opensea import get_collection
 from sqlalchemy import exc
@@ -20,12 +20,12 @@ def collection_details(slug):
     # TODO: Build Page
     # TODO: Add page Styling
 
-    collection = Collection.get_one(slug)
+    collection = Collection.query.filter_by(slug=slug).first_or_404()
+    stats = CollectionStats.todays_floor(collection.id)
 
-    if collection is None:
-        return redirect(url_for("collections_bp.list_collections"))
-
-    return render_template("collection_details.html.j2", collection=collection)
+    return render_template(
+        "collection_details.html.j2", collection=collection, stats=stats
+    )
 
 
 @collections_bp.route("/id/<name>/edit", methods=["GET", "POST"])
