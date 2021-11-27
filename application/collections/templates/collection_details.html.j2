@@ -2,7 +2,65 @@
 {% block title %} | {{ collection.name }}{% endblock %}
 
 {% block content %}
+
+<div class="w-100 mb-3">
+    <img src="{{ collection.banner_image_url }}" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover;">
+</div>
+<div class="row">
+    <div class="col col-12 col-lg-4">
+        <div class="d-flex flex-column align-items-center">
+                <div class="mb-2" style="margin-top:-75px">
+                    <img src="{{ collection.image_url }}" class="rounded-circle img-thumbnail" style="width: 125px; height:125px; object-fit: cover;">
+                </div>
+                <h1 class="fw-bold text-center">{{ collection.name }}</h1>  
+                <div>
+                    <a href="https://opensea.io/collection/{{ collection.slug }}">OpenSea <i class="" data-bs-toggle="tooltip" data-bs-placement="top" title="OpenSea"></i></a>
+                    {% if collection.external_link %}
+                        <a href="{{ collection.external_link }}"><i class="bi bi-window-fullscreen text-dark fs-3 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Website"></i></a>
+                    {% endif %}
+                    {% if collection.discord_url %}
+                        <a href="{{ collection.discord_url }}"><i class="bi bi-discord text-dark fs-3  ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Discord"></i></a>
+                    {% endif %}
+                    {% if collection.twitter_username %}
+                        <a href="{{ collection.twitter_username }}"><i class="bi bi-twitter text-dark fs-3 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter"></i></a>
+                    {% endif %}
+                    {% if collection.instagram_username %}
+                        <a href="{{ collection.instagram_username }}"><i class="bi bi-instagram text-dark fs-3 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Instagram"></i></a>
+                    {% endif %}
+                    {% if collection.telegram_url %}
+                        <a href="{{ collection.telegram_url }}"><i class="bi bi-telegram text-dark fs-3 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram"></i></a>
+                    {% endif %}
+                    {% if collection.wiki_url %}
+                        <a href="{{ collection.wiki_url }}"><i class="bi bi-book text-dark fs-3 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Wiki"></i></a>
+                    {% endif %}
+                </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="d-flex flex-column align-items-center">
+            <div class="mt-5"><p>{{ collection.description }}</p></div>
+        </div>
+    </div> 
+</div>
+
+{# 
+<div class="card shadow-sm">
+    <img src="{{ collection.banner_image_url }}" class="card-img-top" style="width: 100%; height: 15vw; object-fit: cover;">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+                <img src="{{ collection.image_url }}" class="rounded-circle img-thumbnail" style="width: 50px; height:50px; object-fit: cover;">
+                <h5 class="card-title ms-3 mb-0">{{ collection.name }}</h5>
+        </div>
+        <p class="card-text">{{ collection.description | truncate(150)}}</p>
+        <a href="/collections/id/{{ collection.slug }}" class="stretched-link">More Details</a>
+    </div>
+</div>
+
+
+<div class="card">
 <img src={{collection.banner_image_url}} style="width:500px">
 <h1>{{ collection.name }}</h1>
+
+</div> #}
 
 {% endblock %}
