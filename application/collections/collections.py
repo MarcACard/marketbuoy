@@ -68,6 +68,7 @@ def add_collection():
             wiki_url=data["wiki_url"],
             discord_url=data["discord_url"],
             image_url=data["image_url"],
+            external_link=data["primary_asset_contracts"][0]["external_link"],
         )
 
         try:

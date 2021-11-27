@@ -24,6 +24,7 @@ class Collection(db.Model):
     wiki_url = db.Column(db.String)
     discord_url = db.Column(db.String)
     image_url = db.Column(db.String)
+    external_link = db.Column(db.String)
     last_updated = db.Column(
         db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
